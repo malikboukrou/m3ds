@@ -32,11 +32,13 @@ public:
 private:
   std::vector<float> _trianglePosition;
   std::vector<float> _triangleColor;
+  std::vector<unsigned int> _indexData;
   std::vector<float> _triangleTexCoord;
 
   GLuint _trianglePositionBuffer;
   GLuint _triangleColorBuffer;
   GLuint _triangleTexCoordBuffer;
+  GLuint _indexBuffer;
 
   GLuint _triangleVAO;
   GLuint _shader0;
