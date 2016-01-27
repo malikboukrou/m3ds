@@ -20,29 +20,24 @@ GLApplication::GLApplication() {
     };
     */
 
+
     _trianglePosition = {
-        -0.8,-0.5,0.0, // vertex 0 anciennement vertex 0
-        0.8,0.5,0.0,  // 1 anciennement 4
-        -0.5,0.5,0.0,  // 2 anciennement 2
-        -0.2,-0.5,0.0, // 3 anciennement 1
-        0.5,-0.5,0.0,  // 4 anciennement 5
-        0.2,0.5,0.0  // 5 anciennement 3
+        -0.8,-0.8,0.0,
+        -0.8,0.8,0.0,
+        -0.4,-0.8,0.0,
+        -0.4,0.8,0.0,
+        0.0,-0.8,0.0,
+        0.0,0.8,0.0,
+        0.4,-0.8,0.0,
+        0.4,0.8,0.0
     };
+    // tous les sommets à rouge :
+    _triangleColor.clear();
+    for(unsigned int i=0;i<9;++i) {
+        _triangleColor.push_back(1);_triangleColor.push_back(0);_triangleColor.push_back(0);_triangleColor.push_back(1);
+    }
 
-    _indexData = {0, 2, 3, 1, 4, 5};
-
-    _triangleColor = {
-        0.3,0,0.6,1,
-        0.3,0,0.6,1,
-        0.0,0.9,0.0,1,
-
-        0.0,0.5,0.6,1,
-        0.0,0.5,0.6,1,
-        0.9,0.0,0.0,1
-    };
-
-
-
+    //_indexData = {0, 1, 2, 2, 3, 4};
 
 }
 
@@ -50,13 +45,20 @@ GLApplication::GLApplication() {
 
 
 /** ********************************************************************** **/
+void GLApplication::initStrip(int nbSlice,float xmin,float xmax,float ymin,float ymax) {
+
+
+}
+
+
+
 void GLApplication::initialize() {
     // appelée 1 seule fois à l'initialisation du contexte
     // => initialisations OpenGL
     glClearColor(1,1,1,1);
 
     glLineWidth(2.0);
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
 
     _shader0=initProgram("simple");
@@ -95,7 +97,8 @@ void GLApplication::draw() {
     glBindVertexArray(_triangleVAO);
 
     //glDrawArrays(GL_TRIANGLES,0,6);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    //glDrawArrays(GL_TRIANGLES,0,9);
+    glDrawArrays(GL_TRIANGLE_STRIP,0,8);
 
     glBindVertexArray(0);
     glUseProgram(0);
