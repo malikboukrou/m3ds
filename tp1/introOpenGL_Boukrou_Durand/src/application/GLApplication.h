@@ -16,6 +16,7 @@ public:
 
   /** ***** **/
   /** GLApplication must implement these methods : */
+
   virtual void initialize();
   virtual void update();
   virtual void draw();
@@ -28,6 +29,8 @@ public:
   void initTriangleBuffer();
   void initTriangleVAO();
   void initTexture();
+
+  void initStrip(int nbSlice,float xmin,float xmax,float ymin,float ymax);
 
 private:
   std::vector<float> _trianglePosition;
