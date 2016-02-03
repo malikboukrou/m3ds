@@ -47,7 +47,8 @@ void GLApplication::initialize() {
 
 
   _shader.attribute("position",0);
-  _shader.attribute("color",1);
+  _shader.attribute("normal",1);
+
   _shader.read("openGL3D");
 
 
@@ -69,7 +70,7 @@ void GLApplication::update() {
   // avant l'affichage de la prochaine image (animation)
   // ...
 
-  _angle+=0.8;
+  _angle+=2.0;
 
 
   _transform.setTranslation(0,0,-15);
@@ -88,6 +89,8 @@ void GLApplication::draw() {
 
   _shader.uniform("projection",_projection);
   _shader.uniform("transform",_transform);
+  _shader.uniform("lightPosition",_lightPosition);
+  _shader.uniform("diffuseColor", Vector3(0.2,0.8,0.2));
 
   _basicMesh.draw();
   glUseProgram(0);

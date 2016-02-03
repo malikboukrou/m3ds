@@ -106,13 +106,13 @@ void BasicMesh::initObj(const ObjLoader &obj) {
         _attribute.push_back(obj.positionVertex(i,j).y());
         _attribute.push_back(obj.positionVertex(i,j).z());
 
-        //_attribute.push_back(obj.normalVertex(i,j).x());
-        //_attribute.push_back(obj.normalVertex(i,j).y());
-        //_attribute.push_back(obj.normalVertex(i,j).z());
+        _attribute.push_back(obj.normalVertex(i,j).x());
+        _attribute.push_back(obj.normalVertex(i,j).y());
+        _attribute.push_back(obj.normalVertex(i,j).z());
 
-        _attribute.push_back(obj.normalVertex(i,j).x()+1*0.5);
-        _attribute.push_back(obj.normalVertex(i,j).y()+1*0.5);
-        _attribute.push_back(obj.normalVertex(i,j).z()+1*0.5);
+        //_attribute.push_back(obj.normalVertex(i,j).x()+1*0.5);
+        //_attribute.push_back(obj.normalVertex(i,j).y()+1*0.5);
+        //_attribute.push_back(obj.normalVertex(i,j).z()+1*0.5);
     }
   }
 
