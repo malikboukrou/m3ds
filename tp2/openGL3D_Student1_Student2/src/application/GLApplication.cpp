@@ -21,7 +21,9 @@ GLApplication::GLApplication() {
 
   _angle=0.0;
 
-
+  //Lectures d'objets .obj
+  _obj.readInit("cow.obj",Vector3(-10,-10,-30),Vector3(10,10,-10)); // reporte l'objet dans la boite d'extémités (-10,-10,-30) et (10,10,-10)
+  _basicMesh.initObj(_obj); // pour remplacer l'initialisation du tétraèdre
 
 
 

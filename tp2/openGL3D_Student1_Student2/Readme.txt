@@ -22,8 +22,13 @@ Question 9 :
 
 1. On obtient un écran blanc. C'est normal cela signifie que les valeurs passées entrantes sont inférieures et non supérieures aux valeurs stockées.
 
-2. On a spécifié une valeure initiale à 0, soit inférieure à celle initiale. En conséquence avec le GL_GREATER les triangles vert et cyan étant chargés en dernier s'affichent.
+2. On a spécifié une valeure initiale à 0, soit inférieure à celle initiale. En conséquence avec le GL_GREATER les triangles vert et cyan étant chargés avec le z le plus élevé s'affichent.
 
-3. idem que pour la 2. sauf qu'il calcule ce qui est supérieur à la valeure initiale et ce qui est inférieur. Il efface donc la partie inférieur à la valeure initialisée soit les extrémités des triangles.
+3. idem que pour la 2. sauf qu'il calcule ce qui est supérieur à la valeure initiale et ce qui est inférieur. Il efface donc la partie inférieur à la valeure initialisée soit les extrémités des triangles car ils ont un z à -1
+
+Question 16 :
+
+cube = 24 sommets (1 couleur par face)
+
 
 

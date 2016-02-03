@@ -102,9 +102,17 @@ void BasicMesh::initObj(const ObjLoader &obj) {
   // - obj.normalVertex(i,j) = normale du j-ème sommet dans le i-ième triangle (de type Vector3)
   for(unsigned int i=0;i<obj.nbFace();++i) {
     for(unsigned int j=0;j<3;++j) {
+        _attribute.push_back(obj.positionVertex(i,j).x());
+        _attribute.push_back(obj.positionVertex(i,j).y());
+        _attribute.push_back(obj.positionVertex(i,j).z());
 
-    // TODO
+        //_attribute.push_back(obj.normalVertex(i,j).x());
+        //_attribute.push_back(obj.normalVertex(i,j).y());
+        //_attribute.push_back(obj.normalVertex(i,j).z());
 
+        _attribute.push_back(obj.normalVertex(i,j).x()+1*0.5);
+        _attribute.push_back(obj.normalVertex(i,j).y()+1*0.5);
+        _attribute.push_back(obj.normalVertex(i,j).z()+1*0.5);
     }
   }
 
@@ -150,7 +158,8 @@ void BasicMesh::initDraw() {
 void BasicMesh::draw() {
   glBindVertexArray(_vao);
 
-  glDrawElements(GL_TRIANGLES,_element.size(),GL_UNSIGNED_INT,(const GLvoid *)(0*sizeof(GLuint)));
+  //glDrawElements(GL_TRIANGLES,_element.size(),GL_UNSIGNED_INT,(const GLvoid *)(0*sizeof(GLuint)));
+  glDrawArrays(GL_TRIANGLES,0,_attribute.size());
 
   glBindVertexArray(0);
 }
