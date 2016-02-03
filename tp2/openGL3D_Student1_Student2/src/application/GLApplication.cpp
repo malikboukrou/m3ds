@@ -10,6 +10,8 @@ GLApplication::~GLApplication() {
 
 GLApplication::GLApplication() {
 
+  _projection.setOrtho(-20,20,-20,20,5,100);
+
   _lightPosition.set(0,0,0);
 
   _basicMesh.initTetrahedron();
@@ -29,10 +31,10 @@ GLApplication::GLApplication() {
 void GLApplication::initialize() {
   // appelée 1 seule fois à l'initialisation du contexte
   // => initialisations OpenGL
-  glClearColor(1,1,1,1);
+   glClearColor(1,1,1,1);
 
     // glLineWidth(2.0);
-  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+   glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
    glEnable(GL_DEPTH_TEST);
    glDepthFunc(GL_LESS);
@@ -79,6 +81,7 @@ void GLApplication::draw() {
 
   glUseProgram(_shader.id());
 
+  _shader.uniform("projection",_projection);
   _basicMesh.draw();
   glUseProgram(0);
 
