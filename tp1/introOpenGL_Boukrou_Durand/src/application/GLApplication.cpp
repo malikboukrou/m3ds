@@ -32,13 +32,15 @@ GLApplication::GLApplication() {
         0.4,0.8,0.0
     };
     // tous les sommets à rouge :
+
     _triangleColor.clear();
     for(unsigned int i=0;i<9;++i) {
         _triangleColor.push_back(1);_triangleColor.push_back(0);_triangleColor.push_back(0);_triangleColor.push_back(1);
     }
-
     //_indexData = {0, 1, 2, 2, 3, 4};
 
+    initStrip(20,-0.8, 0.8,-0.8,0.8);
+    //initRing(20,0.5 ,0.8);
 }
 
 
@@ -46,11 +48,69 @@ GLApplication::GLApplication() {
 
 /** ********************************************************************** **/
 void GLApplication::initStrip(int nbSlice,float xmin,float xmax,float ymin,float ymax) {
+    _trianglePosition.clear();
+
+        float tmpX = xmin;
+        _triangleColor.clear();
+        float tmpBleu = 1, tmpGreen = 0;
+
+        for(int i=0; i<nbSlice; i++){
+            _trianglePosition.push_back(tmpX);
+            _trianglePosition.push_back(ymin);
+            _trianglePosition.push_back(0.0);
+            _trianglePosition.push_back(tmpX);
+            _trianglePosition.push_back(ymax);
+            _trianglePosition.push_back(0.0);
 
 
+            _triangleColor.push_back(0);
+            _triangleColor.push_back(tmpGreen);
+            _triangleColor.push_back(0);
+            _triangleColor.push_back(1);
+
+            _triangleColor.push_back(0);
+            _triangleColor.push_back(0);
+            _triangleColor.push_back(tmpBleu);
+            _triangleColor.push_back(1);
+
+            tmpGreen += 1.0/nbSlice;
+            tmpBleu -= 1.0/nbSlice;
+
+            tmpX = tmpX + (xmax - xmin)/nbSlice;
+            printf("\n%d", i);
+        }
 }
 
+void GLApplication::initRing(int nbSlice,float r0,float r1){
+    _trianglePosition.clear();
 
+        float tmpR = r0;
+        _triangleColor.clear();
+        float tmpBleu = 1, tmpGreen = 0;
+
+        for(int i=0; i<nbSlice; i++){
+            _trianglePosition.push_back(tmpR);
+            _trianglePosition.push_back(r0);
+            _trianglePosition.push_back(0.0);
+
+            _trianglePosition.push_back(0);
+            _trianglePosition.push_back(tmpGreen);
+            _trianglePosition.push_back(0);
+            _trianglePosition.push_back(1);
+
+            _trianglePosition.push_back(0);
+            _trianglePosition.push_back(0);
+            _trianglePosition.push_back(tmpBleu);
+            _trianglePosition.push_back(1);
+
+            tmpGreen += 1.0/nbSlice;
+            tmpBleu -= 1.0/nbSlice;
+
+            tmpR = tmpR + (r1- r0)/nbSlice;
+            printf("\n%d", i);
+
+        }
+}
 
 void GLApplication::initialize() {
     // appelée 1 seule fois à l'initialisation du contexte
@@ -58,7 +118,7 @@ void GLApplication::initialize() {
     glClearColor(1,1,1,1);
 
     glLineWidth(2.0);
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
     _shader0=initProgram("simple");
@@ -98,7 +158,7 @@ void GLApplication::draw() {
 
     //glDrawArrays(GL_TRIANGLES,0,6);
     //glDrawArrays(GL_TRIANGLES,0,9);
-    glDrawArrays(GL_TRIANGLE_STRIP,0,8);
+    glDrawArrays(GL_TRIANGLE_STRIP,0, _trianglePosition.size());
 
     glBindVertexArray(0);
     glUseProgram(0);
