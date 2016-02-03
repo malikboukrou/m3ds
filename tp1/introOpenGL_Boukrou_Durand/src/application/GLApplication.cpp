@@ -20,7 +20,7 @@ GLApplication::GLApplication() {
     };
     */
 
-
+    /*
     _trianglePosition = {
         -0.8,-0.8,0.0,
         -0.8,0.8,0.0,
@@ -40,10 +40,30 @@ GLApplication::GLApplication() {
         _triangleColor.push_back(0);
         _triangleColor.push_back(1);
     }
+    */
     //_indexData = {0, 1, 2, 2, 3, 4};
 
-    initStrip(30,-0.8, 0.8,-0.8,0.8);
-    //initRing(20,0.5 ,0.8);
+    _trianglePosition = { // rectangle tracé avec TRIANGLE_STRIP
+                          -0.6,-0.8,0,
+                          -0.6,0.8,0,
+                          0.6,-0.8,0,
+                          0.6,0.8,0
+                        };
+    _triangleColor = { // tous les sommets en rouge
+                       1,0,0,1,
+                       1,0,0,1,
+                       1,0,0,1,
+                       1,0,0,1,
+                     };
+    _triangleTexCoord = { /* coordonnées de texture en chaque sommet
+                          0,0,
+                          0,1,
+                          0.5,0,
+                          0.5,1 */
+                        };
+
+    _bool = false;
+    _coeff = 1.0;
 }
 
 
@@ -89,32 +109,53 @@ void GLApplication::initStrip(int nbSlice,float xmin,float xmax,float ymin,float
 
 void GLApplication::initRing(int nbSlice,float r0,float r1){
     _trianglePosition.clear();
-
-    float tmpR = r0;
     _triangleColor.clear();
+
+    float theta = 0, pi = 3.14159;
+    float xr0 = r0, yr0 = 0, xr1 = r1, yr1 = 0;
     float tmpBleu = 1, tmpGreen = 0;
 
     for(int i=0; i<nbSlice; i++){
-        _trianglePosition.push_back(tmpR);
-        _trianglePosition.push_back(r0);
+        _trianglePosition.push_back(xr0);
+        _trianglePosition.push_back(yr0);
         _trianglePosition.push_back(0.0);
 
-        _trianglePosition.push_back(0);
-        _trianglePosition.push_back(tmpGreen);
-        _trianglePosition.push_back(0);
-        _trianglePosition.push_back(1);
+        _trianglePosition.push_back(xr1);
+        _trianglePosition.push_back(yr1);
+        _trianglePosition.push_back(0.0);
 
-        _trianglePosition.push_back(0);
-        _trianglePosition.push_back(0);
-        _trianglePosition.push_back(tmpBleu);
-        _trianglePosition.push_back(1);
+        _triangleColor.push_back(0);
+        _triangleColor.push_back(tmpGreen);
+        _triangleColor.push_back(0);
+        _triangleColor.push_back(1);
+
+        _triangleColor.push_back(0);
+        _triangleColor.push_back(0);
+        _triangleColor.push_back(tmpBleu);
+        _triangleColor.push_back(1);
 
         tmpGreen += 1.0/nbSlice;
         tmpBleu -= 1.0/nbSlice;
 
-        tmpR = tmpR + (r1- r0)/nbSlice;
-        printf("\n%d", i);
+        //Q31
+        _triangleTexCoord.push_back(((r0*cos(i*-((2*pi)/(nbSlice-1))))+1)/2);
+        _triangleTexCoord.push_back(((r0*sin(i*((2*pi)/(nbSlice-1))))+1)/2);
+        _triangleTexCoord.push_back(((r1*cos(i*-((2*pi)/(nbSlice-1))))+1)/2);
+        _triangleTexCoord.push_back(((r1*sin(i*((2*pi)/(nbSlice-1))))+1)/2);
 
+        theta += (2*pi)/(nbSlice-1);
+
+        xr0 = r0*cos(theta);
+        yr0 = r0*sin(theta);
+        xr1 = r1*cos(theta);
+        yr1 = r1*sin(theta);
+
+        /* Q30
+        _triangleTexCoord.push_back(((float)i/nbSlice));
+        _triangleTexCoord.push_back(1);
+        _triangleTexCoord.push_back(((float)i/nbSlice));
+        _triangleTexCoord.push_back(0);
+        */
     }
 }
 
@@ -129,7 +170,8 @@ void GLApplication::initialize() {
 
     _shader0=initProgram("simple");
 
-
+    //initStrip(30,-0.8, 0.8,-0.8,0.8);
+    initRing(30, 0.2, 0.7);
     initTriangleBuffer();
     initTriangleVAO();
     initTexture();
@@ -151,6 +193,17 @@ void GLApplication::update() {
     // avant l'affichage de la prochaine image (animation)
     // ...
 
+    float var=.01;
+
+    if(_bool)
+        _coeff+=var;
+    else
+        _coeff -= var;
+
+    if (_coeff > 1.)
+        _bool = false;
+    if (_coeff < 0.)
+        _bool = true;
 
 }
 
@@ -162,13 +215,22 @@ void GLApplication::draw() {
     glUseProgram(_shader0);
     glBindVertexArray(_triangleVAO);
 
+    //Question 24 : remplacer "1" par "_coeff"
+    glUniform1f(glGetUniformLocation(_shader0,"coeff"), _coeff);
+
     //glDrawArrays(GL_TRIANGLES,0,6);
     //glDrawArrays(GL_TRIANGLES,0,9);
-    glDrawArrays(GL_TRIANGLE_STRIP,0, _trianglePosition.size()/3);
+
+    glActiveTexture(GL_TEXTURE0); // on travaille avec l'unité de texture 0
+    // dans l'instruction suivante, _textureId correspond à l'image "lagoon.jpg"; cf GLApplication::initTexture pour l'initialisation de _textureId
+    glBindTexture(GL_TEXTURE_2D,_textureId); // l'unité de texture 0 correspond à la texture _textureId
+    // (le fragment shader manipule des unités de textures et non les identifiants de texture directement)
+    glUniform1f(glGetUniformLocation(_shader0,"texture"),0); // on affecte la valeur du sampler2D du fragment shader à l'unité de texture 0.
+
+    glDrawArrays(GL_TRIANGLE_STRIP,0,_trianglePosition.size()/3);
 
     glBindVertexArray(0);
     glUseProgram(0);
-
 
     snapshot(); // capture opengl window if requested
 }
@@ -240,6 +302,7 @@ GLuint GLApplication::initProgram(const std::string &filename) {
 
     glBindAttribLocation(program,0,"position");
     glBindAttribLocation(program,1,"color");
+    glBindAttribLocation(program, 2, "texCoord");
 
 
     glLinkProgram(program);
@@ -291,6 +354,10 @@ void GLApplication::initTriangleBuffer() {
     glBindBuffer(GL_ARRAY_BUFFER,_triangleColorBuffer);
     glBufferData(GL_ARRAY_BUFFER,_triangleColor.size()*sizeof(float),_triangleColor.data(),GL_STATIC_DRAW);
 
+    glGenBuffers(1,&_triangleTexCoordBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER,_triangleTexCoordBuffer);
+    glBufferData(GL_ARRAY_BUFFER,_triangleTexCoord.size()*sizeof(int),_triangleTexCoord.data(),GL_STATIC_DRAW);
+
 }
 
 
@@ -305,9 +372,13 @@ void GLApplication::initTriangleVAO() {
     glVertexAttribPointer(1,4,GL_FLOAT,GL_FALSE,0,0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+
+    glBindBuffer(GL_ARRAY_BUFFER,_triangleTexCoordBuffer);
+    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,0,0);
+
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
 }

@@ -38,6 +38,8 @@ private:
   std::vector<float> _triangleColor;
   std::vector<unsigned int> _indexData;
   std::vector<float> _triangleTexCoord;
+  float _coeff;
+  bool _bool;
 
   GLuint _trianglePositionBuffer;
   GLuint _triangleColorBuffer;
