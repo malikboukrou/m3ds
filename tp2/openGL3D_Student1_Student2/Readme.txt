@@ -18,3 +18,12 @@ Question 8 :
 
 Cela signifie que les triangles rouge et bleu sont au premier plan par rapport aux deux autres.
 
+Question 9 :
+
+1. On obtient un écran blanc. C'est normal cela signifie que les valeurs passées entrantes sont inférieures et non supérieures aux valeurs stockées.
+
+2. On a spécifié une valeure initiale à 0, soit inférieure à celle initiale. En conséquence avec le GL_GREATER les triangles vert et cyan étant chargés en dernier s'affichent.
+
+3. idem que pour la 2. sauf qu'il calcule ce qui est supérieur à la valeure initiale et ce qui est inférieur. Il efface donc la partie inférieur à la valeure initialisée soit les extrémités des triangles.
+
+

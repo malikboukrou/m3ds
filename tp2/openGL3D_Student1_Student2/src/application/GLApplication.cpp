@@ -36,8 +36,7 @@ void GLApplication::initialize() {
 
    glEnable(GL_DEPTH_TEST);
    glDepthFunc(GL_LESS);
-   glClearDepth(1);
-
+   glClearDepth(1.0);
 
 
   _shader.attribute("position",0);
