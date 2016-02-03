@@ -10,6 +10,9 @@ GLApplication::~GLApplication() {
 
 GLApplication::GLApplication() {
 
+  //_projection.setOrtho(-20,20,-20,20,5,100);
+  //_projection.setOrtho(-18,22,-10,30,5,100);
+  //_projection.setOrtho(-5,2,-10,10,5,100);
   _projection.setOrtho(-20,20,-20,20,5,100);
 
   _lightPosition.set(0,0,0);
@@ -64,7 +67,7 @@ void GLApplication::update() {
   // avant l'affichage de la prochaine image (animation)
   // ...
 
-  _angle+=0.2;
+  _angle+=0.8;
 
 
   _transform.setTranslation(0,0,-15);
@@ -82,6 +85,8 @@ void GLApplication::draw() {
   glUseProgram(_shader.id());
 
   _shader.uniform("projection",_projection);
+  _shader.uniform("transform",_transform);
+
   _basicMesh.draw();
   glUseProgram(0);
 
