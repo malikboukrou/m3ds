@@ -23,6 +23,7 @@ Car::Car() {
 // ******************************************************************
 // méthodes à compléter lors du TP
 void Car::drawRim() {
+    p3d::modelviewMatrix.push();
     p3d::modelviewMatrix.scale(0.1,0.1,2);
     drawCylinder();
     p3d::modelviewMatrix.pop();
@@ -60,19 +61,42 @@ void Car::drawRim() {
     p3d::modelviewMatrix.rotate(315,1,0,0);
     p3d::modelviewMatrix.scale(0.1,0.1,2);
     drawCylinder();
+    p3d::modelviewMatrix.pop();
 }
 
 void Car::drawWheel() {
+
+    p3d::modelviewMatrix.push();
+
     p3d::modelviewMatrix.scale(2.5,2.5,2.5);
     p3d::modelviewMatrix.rotate(90,0,1,0);
     drawTorus();
+
     p3d::modelviewMatrix.pop();
-    p3d::modelviewMatrix.push();
+
 
 }
 
 void Car::drawAxle() {
-
+    p3d::modelviewMatrix.push();
+    p3d::modelviewMatrix.rotate(90,0,1,0);
+    p3d::modelviewMatrix.scale(0.3,0.3,4.5);
+    drawCylinder();
+    p3d::modelviewMatrix.pop();
+    p3d::modelviewMatrix.push();
+    drawRim();
+    p3d::modelviewMatrix.pop();
+    p3d::modelviewMatrix.push();
+    drawWheel();
+    p3d::modelviewMatrix.pop();
+    p3d::modelviewMatrix.push();
+    p3d::modelviewMatrix.translate(4.5,0,0);
+    drawRim();
+    p3d::modelviewMatrix.pop();
+    p3d::modelviewMatrix.push();
+    p3d::modelviewMatrix.translate(4.5,0,0);
+    drawWheel();
+    p3d::modelviewMatrix.pop();
 }
 
 void Car::drawBody() {
@@ -88,8 +112,7 @@ void Car::drawBody() {
 void Car::draw() {
   p3d::modelviewMatrix.push();
 
-  drawWheel();
-  drawRim();
+  drawAxle();
 
 
   p3d::modelviewMatrix.pop();
