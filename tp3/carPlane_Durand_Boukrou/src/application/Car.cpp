@@ -37,8 +37,10 @@ void Car::drawAxle() {
 void Car::drawBody() {
     p3d::modelviewMatrix.scale(3,1,1);
     drawCube();
+    p3d::modelviewMatrix.pop();
+    p3d::modelviewMatrix.push();
     p3d::modelviewMatrix.scale(1,1,1);
-    p3d::modelviewMatrix.translate(0,1,0);
+    p3d::modelviewMatrix.translate(2,2,0);
     drawCube();
 }
 
