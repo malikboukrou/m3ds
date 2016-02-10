@@ -23,7 +23,11 @@ Car::Car() {
 // ******************************************************************
 // méthodes à compléter lors du TP
 void Car::drawRim() {
+<<<<<<< HEAD
     p3d::modelviewMatrix.push();
+=======
+    p3d::diffuseColor=Vector3(0,1,50);
+>>>>>>> 9ff718e73f3db4d74d82a985440f6bf402ef4ba1
     p3d::modelviewMatrix.scale(0.1,0.1,2);
     drawCylinder();
     p3d::modelviewMatrix.pop();
@@ -70,11 +74,10 @@ void Car::drawWheel() {
 
     p3d::modelviewMatrix.scale(2.5,2.5,2.5);
     p3d::modelviewMatrix.rotate(90,0,1,0);
+    p3d::diffuseColor=Vector3(0,1,80);
     drawTorus();
 
     p3d::modelviewMatrix.pop();
-
-
 }
 
 void Car::drawAxle() {
@@ -101,6 +104,7 @@ void Car::drawAxle() {
 
 void Car::drawBody() {
     p3d::modelviewMatrix.scale(3,1,1);
+    p3d::diffuseColor=Vector3(0,200,50);
     drawCube();
     p3d::modelviewMatrix.pop();
     p3d::modelviewMatrix.push();
