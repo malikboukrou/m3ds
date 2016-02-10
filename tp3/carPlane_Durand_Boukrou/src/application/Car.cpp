@@ -36,6 +36,7 @@ void Car::drawAxle() {
 
 void Car::drawBody() {
     p3d::modelviewMatrix.scale(3,1,1);
+    p3d::diffuseColor=Vector3(0,200,50);
     drawCube();
     p3d::modelviewMatrix.pop();
     p3d::modelviewMatrix.push();

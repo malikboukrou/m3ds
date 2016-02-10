@@ -386,7 +386,7 @@ void initCube() {
   };
   std::vector<float> texCoord {
     0.0,1.0, // face
-    0.0,0.0,
+    1.0,1.0,
     1.0,1.0,
     1.0,0.0,
     0.0,1.0, // face
