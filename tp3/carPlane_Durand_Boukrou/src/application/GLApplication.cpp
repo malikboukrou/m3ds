@@ -181,14 +181,49 @@ void GLApplication::updateCamera() {
       }
       break;
     case Camera_Follow_Car: {
+        Quaternion q = _car.orientation();
+        q.rotate(180,Vector3(0,1,0));
+        //camera pour la voiture
+        Vector3 camCar = Vector3(0,3,-6);
+        //camera pour le monde
+        Vector3 camWorld = _car.position() + (_car.orientation()*camCar);
 
+        /*
+        _camera.orientation(q);
+        _camera.position(camWorld);
+        */
+
+        //transition
+        Quaternion tmp = _car.orientation();
+        tmp.rotate(180,Vector3(0,1,0));
+        _cameraStop.orientation(tmp);
+        _cameraStop.position(camWorld);
+        _camera.orientation((1-_lambda)*_cameraStart.orientation() + _lambda*_cameraStop.orientation());
+        _camera.position((1-_lambda)*_cameraStart.position() + _lambda*_cameraStop.position());
       }
       break;
     case Camera_Follow_Plane: {
+        //_camera.position(_airplane.position()+Vector3(0,1,-3));
+        //_camera.orientation(180,Vector3(0,1,0));
+        Quaternion q = _airplane.orientation();
+        q.rotate(180,Vector3(0,1,0));
+        //camera pour l'avion
+        Vector3 camPlane = Vector3(0,1,-3);
+        //camera pour le monde
+        Vector3 camWorld = _airplane.position() + (_airplane.orientation()*camPlane);
 
-        _camera.position(_airplane.position()+Vector3(0,1,-3));
-        _camera.orientation(180,Vector3(0,1,0));
+        /*
+        _camera.orientation(q);
+        _camera.position(camWorld);
+        */
 
+        //transition
+        Quaternion tmp = _airplane.orientation();
+        tmp.rotate(180,Vector3(0,1,0));
+        _cameraStop.orientation(tmp);
+        _cameraStop.position(camWorld);
+        _camera.orientation((1-_lambda)*_cameraStart.orientation() + _lambda*_cameraStop.orientation());
+        _camera.position((1-_lambda)*_cameraStart.position() + _lambda*_cameraStop.position());
       }
       break;
     default:break;
