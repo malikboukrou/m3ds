@@ -37,13 +37,13 @@ void Revolution::initSphere() {
   double phi = 0.;
   double theta = 0.;
 
-  for (int i = 0; i < nbSlice; i++){
-      for (int j = 0; j <nbStack; j++){
-          theta = (2*(M_PI))/(nbSlice);
+  for (int i = 0; i < nbStack; i++){
+      for (int j = 0; j <nbSlice; j++){
+          theta += (2*(M_PI))/(float(nbSlice -1.));
           //p
-          int x = cos(theta)*sin(phi);
-          int y = cos(phi);
-          int z = sin(theta)*sin(phi);
+          double x = cos(theta)*sin(phi);
+          double y = cos(phi);
+          double z = sin(theta)*sin(phi);
           p.push_back(x);
           p.push_back(y);
           p.push_back(z);
@@ -52,23 +52,23 @@ void Revolution::initSphere() {
 
           //t
 
-          phi += (M_PI)/(nbStack);
+
 
 
       }
-
+      phi += (M_PI)/(float(nbStack-1.));
       theta = 0.;
   }
 
   index.clear();
 
   int a, b,c ,d;
-  for (int i = 0; i < nbStack; i++){
-      for (int j = 0; j < nbSlice; j++){
-          a = j + i*nbSlice;
-          b = j + 1 + i*nbSlice;
-          c = a + nbSlice + 1;
-          d = b + nbSlice + 1;
+  for (int i = 0; i < nbStack -1; i++){
+      for (int j = 0; j < nbSlice -1; j++){
+          a = j + (i*nbSlice);
+          b = j + 1 + (i*nbSlice);
+          c = a + nbSlice ;
+          d = b + nbSlice ;
 
           index.push_back(c);
           index.push_back(a);
@@ -76,6 +76,8 @@ void Revolution::initSphere() {
           index.push_back(b);
           index.push_back(d);
           index.push_back(c);
+
+
       }
   }
   // *******
