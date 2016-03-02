@@ -34,10 +34,50 @@ void Revolution::initSphere() {
 
   // *******
   //  TODO
+  double phi = 0.;
+  double theta = 0.;
+
+  for (int i = 0; i < nbSlice; i++){
+      for (int j = 0; j <nbStack; j++){
+          theta = (2*(M_PI))/(nbSlice);
+          //p
+          int x = cos(theta)*sin(phi);
+          int y = cos(phi);
+          int z = sin(theta)*sin(phi);
+          p.push_back(x);
+          p.push_back(y);
+          p.push_back(z);
+
+          //n
+
+          //t
+
+          phi += (M_PI)/(nbStack);
 
 
+      }
 
+      theta = 0.;
+  }
 
+  index.clear();
+
+  int a, b,c ,d;
+  for (int i = 0; i < nbStack; i++){
+      for (int j = 0; j < nbSlice; j++){
+          a = j + i*nbSlice;
+          b = j + 1 + i*nbSlice;
+          c = a + nbSlice + 1;
+          d = b + nbSlice + 1;
+
+          index.push_back(c);
+          index.push_back(a);
+          index.push_back(b);
+          index.push_back(b);
+          index.push_back(d);
+          index.push_back(c);
+      }
+  }
   // *******
 
 
