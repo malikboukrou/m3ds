@@ -40,13 +40,21 @@ void Revolution::initSphere() {
     for (int i = 0; i < nbStack; i++){
         for (int j = 0; j <nbSlice; j++){
             theta += (2*(M_PI))/(float(nbSlice -1.));
-            //p
+
             double x = cos(theta)*sin(phi);
             double y = cos(phi);
             double z = sin(theta)*sin(phi);
+            //p
             p.push_back(x);
             p.push_back(y);
             p.push_back(z);
+            //n
+            n.push_back(x);
+            n.push_back(y);
+            n.push_back(z);
+            //t
+            t.push_back(1.-theta/(2*M_PI));
+            t.push_back(1.-phi/M_PI);
         }
         phi += (M_PI)/(float(nbStack-1.));
         theta = 0.;
@@ -92,7 +100,250 @@ void Revolution::initCube() {
     // *******
     //  TODO
 
+            //face du haut
+            p.push_back(-1);
+            p.push_back(1);
+            p.push_back(-1);
 
+            p.push_back(-1);
+            p.push_back(1);
+            p.push_back(1);
+
+            p.push_back(1);
+            p.push_back(1);
+            p.push_back(1);
+
+            p.push_back(1);
+            p.push_back(1);
+            p.push_back(-1);
+
+            for(int i = 0; i<4; i++){
+                n.push_back(0);
+                n.push_back(1);
+                n.push_back(0);
+            }
+
+            //3
+            t.push_back(0.66);
+            t.push_back(0.5);
+
+            t.push_back(1);
+            t.push_back(0.5);
+
+            t.push_back(1);
+            t.push_back(1);
+
+            t.push_back(0.66);
+            t.push_back(1);
+
+            //face cote 1
+            p.push_back(-1);
+            p.push_back(-1);
+            p.push_back(-1);
+
+            p.push_back(-1);
+            p.push_back(-1);
+            p.push_back(1);
+
+            p.push_back(-1);
+            p.push_back(1);
+            p.push_back(1);
+
+            p.push_back(-1);
+            p.push_back(1);
+            p.push_back(-1);
+
+            for(int i = 0; i<4; i++){
+                n.push_back(-1);
+                n.push_back(0);
+                n.push_back(0);
+            }
+
+            //2
+            t.push_back(0.33);
+            t.push_back(0.5);
+
+            t.push_back(0.66);
+            t.push_back(0.5);
+
+            t.push_back(0.66);
+            t.push_back(1);
+
+            t.push_back(0.33);
+            t.push_back(1);
+
+
+            //face cote 2
+            p.push_back(-1);
+            p.push_back(-1);
+            p.push_back(1);
+
+            p.push_back(1);
+            p.push_back(-1);
+            p.push_back(1);
+
+            p.push_back(1);
+            p.push_back(1);
+            p.push_back(1);
+
+            p.push_back(-1);
+            p.push_back(1);
+            p.push_back(1);
+
+            for(int i = 0; i<4; i++){
+                n.push_back(0);
+                n.push_back(0);
+                n.push_back(1);
+            }
+
+            //1
+            t.push_back(0);
+            t.push_back(0.5);
+
+            t.push_back(0.33);
+            t.push_back(0.5);
+
+            t.push_back(0.33);
+            t.push_back(1);
+
+            t.push_back(0);
+            t.push_back(1);
+
+
+            //face cote 3
+            p.push_back(1);
+            p.push_back(-1);
+            p.push_back(1);
+
+            p.push_back(1);
+            p.push_back(-1);
+            p.push_back(-1);
+
+            p.push_back(1);
+            p.push_back(1);
+            p.push_back(1);
+
+            p.push_back(1);
+            p.push_back(1);
+            p.push_back(-1);
+
+            for(int i = 0; i<4; i++){
+                n.push_back(1);
+                n.push_back(0);
+                n.push_back(0);
+            }
+
+            //5
+            t.push_back(0.33);
+            t.push_back(0);
+
+            t.push_back(0.66);
+            t.push_back(0);
+
+            t.push_back(0.33);
+            t.push_back(0.5);
+
+            t.push_back(0.66);
+            t.push_back(0.5);
+
+            //face cote 4
+            p.push_back(1);
+            p.push_back(-1);
+            p.push_back(-1);
+
+            p.push_back(-1);
+            p.push_back(-1);
+            p.push_back(-1);
+
+            p.push_back(1);
+            p.push_back(1);
+            p.push_back(-1);
+
+            p.push_back(-1);
+            p.push_back(1);
+            p.push_back(-1);
+
+            for(int i = 0; i<4; i++){
+                n.push_back(0);
+                n.push_back(0);
+                n.push_back(-1);
+            }
+
+            //6
+            t.push_back(0.66);
+            t.push_back(0);
+
+            t.push_back(1);
+            t.push_back(0);
+
+            t.push_back(0.66);
+            t.push_back(0.5);
+
+            t.push_back(1);
+            t.push_back(0.5);
+
+            //face du bas
+            p.push_back(1);
+            p.push_back(-1);
+            p.push_back(1);
+
+            p.push_back(1);
+            p.push_back(-1);
+            p.push_back(-1);
+
+            p.push_back(-1);
+            p.push_back(-1);
+            p.push_back(-1);
+
+            p.push_back(-1);
+            p.push_back(-1);
+            p.push_back(1);
+            for(int i = 0; i<4; i++){
+                n.push_back(0);
+                n.push_back(-1);
+                n.push_back(0);
+            }
+
+            //4
+            t.push_back(0);
+            t.push_back(0);
+
+            t.push_back(0.33);
+            t.push_back(0);
+
+            t.push_back(0.33);
+            t.push_back(0.5);
+
+            t.push_back(0);
+            t.push_back(0.5);
+
+
+            // index
+            for(int i = 0; i<3; i++){
+                index.push_back(0 + i*4);
+                index.push_back(1 + i*4);
+                index.push_back(2 + i*4);
+                index.push_back(0 + i*4);
+                index.push_back(2 + i*4);
+                index.push_back(3 + i*4);
+            }
+
+            for(int i = 3; i<5; i++){
+                index.push_back(0 + i*4);
+                index.push_back(1 + i*4);
+                index.push_back(2 + i*4);
+                index.push_back(1 + i*4);
+                index.push_back(3 + i*4);
+                index.push_back(2 + i*4);
+            }
+
+
+            index.push_back(0 + 5*4);
+            index.push_back(2 + 5*4);
+            index.push_back(1 + 5*4);
+            index.push_back(0 + 5*4);
+            index.push_back(3 + 5*4);
+            index.push_back(2 + 5*4);
 
 
     // *******
