@@ -26,25 +26,37 @@ using namespace std;
 ** *********************************************************************************** */
 
 void WFace::draw(bool withNormal) {
-  WEdge *e, *e_new, *start;
-  WVertex *v;
-  e=start=this->edge();
+    WEdge *e, *e_new, *start;
+    WVertex *v;
+    e=start=this->edge();
 
-  vector<Vector3> position;
-  position.clear();
+    vector<Vector3> position;
+    position.clear();
 
-  vector<Vector3> normal;
-  normal.clear();
+    vector<Vector3> normal;
+    normal.clear();
 
-  // TODO : compléter
+    do {
+          if(e->left()==this){
+            e_new = e->succLeft();
+            v = e->begin();
+          }
+          else{
+            e_new = e->succRight();
+            v = e->end();
+          }
+           position.push_back(v->position());
+           normal.push_back(v->normal());
+          e = e_new;
+      } while(e != start);
 
 
 
-  // A Laisser à la fin (effectue un affichage polygone par polygone : lent => uniquement pour vérification/TP)
-  if (withNormal)
-    p3d::drawPolygon(position,normal,true);
-  else
-    p3d::drawPolygon(position,false,0.8);
+    // A Laisser à la fin (effectue un affichage polygone par polygone : lent => uniquement pour vérification/TP)
+    if (withNormal)
+        p3d::drawPolygon(position,normal,true);
+    else
+        p3d::drawPolygon(position,false,0.8);
 
 }
 
@@ -65,21 +77,21 @@ void WFace::draw(bool withNormal) {
 ** rappel : les coordonnés d'un sommet WVertex *v s'obtiennent par v->point() (de type Vector3).
 ** ************************************************************************************ */
 void WFace::computePointFace() {
-  WEdge *e=edge();
-  Vector3 barycentre;
-  WVertex *v;
-  int nbedge=0;
-  barycentre.set(0,0,0);
-  do {
-    if (e->left()==this) v=e->begin(); else v=e->end();
-    barycentre+=v->position();
-    nbedge++;
-    if (e->left()==this) e=e->succLeft(); else e=e->succRight();
-  } while (e!=edge());
-  barycentre=barycentre/nbedge;
+    WEdge *e=edge();
+    Vector3 barycentre;
+    WVertex *v;
+    int nbedge=0;
+    barycentre.set(0,0,0);
+    do {
+        if (e->left()==this) v=e->begin(); else v=e->end();
+        barycentre+=v->position();
+        nbedge++;
+        if (e->left()==this) e=e->succLeft(); else e=e->succRight();
+    } while (e!=edge());
+    barycentre=barycentre/nbedge;
 
-  // affectation point de face
-  _pointFace=barycentre;
+    // affectation point de face
+    _pointFace=barycentre;
 }
 
 
@@ -91,14 +103,14 @@ void WFace::computePointFace() {
 ** *********************************************************************************** */
 
 void WFace::drawLineCatmull() {
-  WEdge *e=this->edge();
-  do {
-    p3d::drawLines(vector<Vector3>{this->pointFace(),e->pointEdge()});
-    if (this==e->left())
-      e=e->succLeft();
-    else
-      e=e->succRight();
-  } while (e!=this->edge());
+    WEdge *e=this->edge();
+    do {
+        p3d::drawLines(vector<Vector3>{this->pointFace(),e->pointEdge()});
+        if (this==e->left())
+            e=e->succLeft();
+        else
+            e=e->succRight();
+    } while (e!=this->edge());
 }
 
 
@@ -108,137 +120,137 @@ void WFace::drawLineCatmull() {
 
 
 WFace::WFace(Winged *owner) {
-  _owner=owner;
-  _edge=NULL;
-  //ctor
+    _owner=owner;
+    _edge=NULL;
+    //ctor
 }
 
 WFace::~WFace() {
-  //dtor
+    //dtor
 }
 
 void WFace::edge(WEdge *e) {
-  _edge=e;
+    _edge=e;
 }
 
 WEdge *WFace::edge() {
-  return _edge;
+    return _edge;
 }
 
 Winged *WFace::owner() {
-  return _owner;
+    return _owner;
 }
 
 void WFace::index(unsigned int i) {
-  _index=i;
+    _index=i;
 }
 
 unsigned int WFace::index() {
-  return _index;
+    return _index;
 }
 
 void WFace::normal(const Vector3 &n) {
-  _normal=n;
+    _normal=n;
 }
 
 const Vector3 &WFace::normal() const {
-  return _normal;
+    return _normal;
 }
 
 const Vector3 &WFace::pointFace() const {
-  return _pointFace;
+    return _pointFace;
 }
 
 
 void WFace::computeNormal() {
-  WEdge *u,*v,*start;
-  Vector3 uvect,vvect;
-  Vector3 n;
-  start=edge();
-  u=edge();
-  if (u->left()==this) uvect=u->direction(); else uvect=-u->direction();
-  do {
-    if (u->left()==this) {
-      v=u->succLeft();
+    WEdge *u,*v,*start;
+    Vector3 uvect,vvect;
+    Vector3 n;
+    start=edge();
+    u=edge();
+    if (u->left()==this) uvect=u->direction(); else uvect=-u->direction();
+    do {
+        if (u->left()==this) {
+            v=u->succLeft();
+        }
+        else {
+            v=u->succRight();
+        }
+        vvect=v->direction();
+        if (v->right()==this) vvect=-vvect;
+        n=uvect.cross(vvect);
+        u=v;
+        uvect=vvect;
+    } while (n.length2()<0.000000001 && (u!=start));
+    if (u==start) {
+        normal(Vector3(0,0,0)); // cas particulier : face aplatie
     }
     else {
-      v=u->succRight();
+        n.normalize();
+        normal(n);
     }
-    vvect=v->direction();
-    if (v->right()==this) vvect=-vvect;
-    n=uvect.cross(vvect);
-    u=v;
-    uvect=vvect;
-  } while (n.length2()<0.000000001 && (u!=start));
-  if (u==start) {
-    normal(Vector3(0,0,0)); // cas particulier : face aplatie
-  }
-  else {
-    n.normalize();
-    normal(n);
-  }
 }
 
 // Catmull
 void WFace::insertVertexPointFace() {
-  WVertex *new_vertex=owner()->createVertex(pointFace());
+    WVertex *new_vertex=owner()->createVertex(pointFace());
 
-  WEdge *start_new,*new_edge,*pred_edge;
-  WEdge *start=edge();
-  if (start->left()==this) start=start->succLeft();
+    WEdge *start_new,*new_edge,*pred_edge;
+    WEdge *start=edge();
+    if (start->left()==this) start=start->succLeft();
 
-  WFace *new_face;
+    WFace *new_face;
 
-  WEdge *e1=start,*e2,*succ_e2;
-  if (e1->left()==this) {
-    e2=e1->succLeft();
-    new_edge=_owner->createEdge(new_vertex,e1->begin());
-  }
-  else {
-    e2=e1->succRight();
-    new_edge=_owner->createEdge(new_vertex,e1->end());
-  }
-  new_vertex->edge(new_edge);
-  pred_edge=new_edge;
-  start_new=new_edge;
-
-  do {
-    new_face=_owner->createFace();
-    new_face->edge(e1);
-    if (e2->left()==this) {
-      succ_e2=e2->succLeft();
-      if (succ_e2!=start) new_edge=_owner->createEdge(new_vertex,e2->end()); else new_edge=start_new;
-      e2->left(new_face);
-      e2->succLeft(new_edge);
-    }
-    else {
-      succ_e2=e2->succRight();
-      if (succ_e2!=start) new_edge=_owner->createEdge(new_vertex,e2->begin()); else new_edge=start_new;
-      e2->succRight(new_edge);
-      e2->right(new_face);
-    }
-
-    new_edge->right(new_face);
-    new_edge->succRight(pred_edge);
-    new_edge->predRight(e2);
-
-    pred_edge->left(new_face);
-    pred_edge->predLeft(new_edge);
-    pred_edge->succLeft(e1);
-
+    WEdge *e1=start,*e2,*succ_e2;
     if (e1->left()==this) {
-      e1->left(new_face);
-      e1->predLeft(pred_edge);
+        e2=e1->succLeft();
+        new_edge=_owner->createEdge(new_vertex,e1->begin());
     }
     else {
-      e1->right(new_face);
-      e1->predRight(pred_edge);
+        e2=e1->succRight();
+        new_edge=_owner->createEdge(new_vertex,e1->end());
     }
-
-    e1=succ_e2;
-    if (e1->left()==this) e2=e1->succLeft(); else e2=e1->succRight();
+    new_vertex->edge(new_edge);
     pred_edge=new_edge;
-  } while (e1!=start);
+    start_new=new_edge;
+
+    do {
+        new_face=_owner->createFace();
+        new_face->edge(e1);
+        if (e2->left()==this) {
+            succ_e2=e2->succLeft();
+            if (succ_e2!=start) new_edge=_owner->createEdge(new_vertex,e2->end()); else new_edge=start_new;
+            e2->left(new_face);
+            e2->succLeft(new_edge);
+        }
+        else {
+            succ_e2=e2->succRight();
+            if (succ_e2!=start) new_edge=_owner->createEdge(new_vertex,e2->begin()); else new_edge=start_new;
+            e2->succRight(new_edge);
+            e2->right(new_face);
+        }
+
+        new_edge->right(new_face);
+        new_edge->succRight(pred_edge);
+        new_edge->predRight(e2);
+
+        pred_edge->left(new_face);
+        pred_edge->predLeft(new_edge);
+        pred_edge->succLeft(e1);
+
+        if (e1->left()==this) {
+            e1->left(new_face);
+            e1->predLeft(pred_edge);
+        }
+        else {
+            e1->right(new_face);
+            e1->predRight(pred_edge);
+        }
+
+        e1=succ_e2;
+        if (e1->left()==this) e2=e1->succLeft(); else e2=e1->succRight();
+        pred_edge=new_edge;
+    } while (e1!=start);
 
 }
 
