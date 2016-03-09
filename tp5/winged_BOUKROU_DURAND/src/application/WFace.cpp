@@ -51,7 +51,6 @@ void WFace::draw(bool withNormal) {
       } while(e != start);
 
 
-
     // A Laisser à la fin (effectue un affichage polygone par polygone : lent => uniquement pour vérification/TP)
     if (withNormal)
         p3d::drawPolygon(position,normal,true);
