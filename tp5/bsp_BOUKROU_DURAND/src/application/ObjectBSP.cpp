@@ -36,8 +36,16 @@ TreeBSP *ObjectBSP::consBSP(const vector<FaceBSP *> &tabFace) {
     return NULL;
   } else {
     res=new TreeBSP();
-    // TODO : A COMPLETER (construire listeNegative et listePositive; mettre le pivot comme noeud de l'arbre res)
+    // TODO : A COMPLETER (construire listeNegative et listePositive; mettre le pivot comme noeud de l'arbre res) : en cours
+    res->node(tabFace[0]);
 
+    for(int i = 0; i < tabFace.size(); i++){
+        tabFace[i]->separe(*tabFace[0]);
+        if (tabFace[i]->facePositive() != NULL)
+            listePositive.push_back(tabFace[i]->facePositive());
+        if (tabFace[i]->faceNegative() != NULL)
+            listeNegative.push_back(tabFace[i]->faceNegative());
+    }
 
     // à laisser à la fin : appels récursifs
     res->left(consBSP(listeNegative));
