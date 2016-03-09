@@ -27,8 +27,11 @@ ESign FaceBSP::sign(const Vector3 &p) const {
 
   ESign res=SIGN_NONE;
 
-  // TODO : A COMPLETER
-
+  // TODO : A COMPLETER : OK
+  if ((_tabVertex[0]->point()-p).dot(_normal) <= 0)
+      res = SIGN_PLUS;
+  else
+      res = SIGN_MINUS;
 
   return res;
 }
@@ -44,8 +47,11 @@ Vector3 FaceBSP::intersection(const Vector3 &p1,const Vector3 &p2) const {
 
   Vector3 res;
 
-  // TODO : A COMPLETER
+  // TODO : A COMPLETER : OK
+  double a = normal().dot(point(1)-p1);
+  double b = normal().dot(p2-p1);
 
+  res = (a/b)*(p2-p1)+p1;
 
   return res;
 }
@@ -68,12 +74,40 @@ void FaceBSP::separe(const FaceBSP &f) {
   vertexNegative.clear();
   vertexPositive.clear();
 
-// TODO : à compléter
+  // TODO : à compléter : OK
+  ESign s = f.sign(_tabVertex[0]->point());
+
+  //première itération
+  int j = _tabVertex.size();
+  if (s != f.sign(_tabVertex[j-1]->point())){
+          VertexBSP *inter = createVertex(f.intersection(_tabVertex[j-1]->point(),_tabVertex[0]->point()));
+          inter->interpolateNormal(*_tabVertex[j-1], *_tabVertex[0]);
+          vertexNegative.push_back(inter);
+          vertexPositive.push_back(inter);
+  }
+  if (s == SIGN_PLUS)
+      vertexPositive.push_back(_tabVertex[0]);
+  else
+      vertexNegative.push_back(_tabVertex[0]);
+
+  //boucle pour les n itérations
+  for (int i = 1; i < _tabVertex.size(); i++){
+    if (s != f.sign(_tabVertex[i]->point())){
+            VertexBSP *inter = createVertex(f.intersection(_tabVertex[i-1]->point(),_tabVertex[i]->point()));
+            inter->interpolateNormal(*_tabVertex[i-1], *_tabVertex[i]);
+            vertexNegative.push_back(inter);
+            vertexPositive.push_back(inter);
+    }
+    s = f.sign(_tabVertex[i]->point());
+    if (s == SIGN_PLUS)
+        vertexPositive.push_back(_tabVertex[i]);
+    else
+        vertexNegative.push_back(_tabVertex[i]);
+  }
 
 
 
-
-// A LAISSER à la fin ! (construction des faces selon les tableaux de points)
+  // A LAISSER à la fin ! (construction des faces selon les tableaux de points)
   createFace(vertexNegative,vertexPositive);
   if ((_facePositive==NULL) && (_faceNegative==NULL)) throw ErrorD("Face découpée en rien du tout (ni plus, ni moins)");
 
