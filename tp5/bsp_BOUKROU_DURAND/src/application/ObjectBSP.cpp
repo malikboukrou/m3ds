@@ -36,10 +36,10 @@ TreeBSP *ObjectBSP::consBSP(const vector<FaceBSP *> &tabFace) {
     return NULL;
   } else {
     res=new TreeBSP();
-    // TODO : A COMPLETER (construire listeNegative et listePositive; mettre le pivot comme noeud de l'arbre res) : en cours
+    // TODO : A COMPLETER (construire listeNegative et listePositive; mettre le pivot comme noeud de l'arbre res) : OK
     res->node(tabFace[0]);
 
-    for(int i = 0; i < tabFace.size(); i++){
+    for(int i = 1; i < tabFace.size(); i++){
         tabFace[i]->separe(*tabFace[0]);
         if (tabFace[i]->facePositive() != NULL)
             listePositive.push_back(tabFace[i]->facePositive());
@@ -63,8 +63,20 @@ void ObjectBSP::drawBSP(TreeBSP *tree,const Vector3 &eye) {
   /// les sélecteurs sont tree->node() (de type FaceBSP *), et tree->left(), tree->right() (de type TreeBSP *)
   /// pour provoquer le tracé d'une face de type FaceBSP * il sufft de faire une_face->addDraw()
 
-  // TODO : à compléter
+  // TODO : à compléter : OK
+  if (tree != NULL){
+      if(tree->node()->sign(eye) == SIGN_MINUS){
+          this->drawBSP(tree->right(),eye);
+          tree->node()->addDraw();
+          this->drawBSP(tree->left(),eye);
+      }
+      else{
+          this->drawBSP(tree->left(),eye);
+          tree->node()->addDraw();
+          this->drawBSP(tree->right(),eye);
+      }
 
+  }
 }
 
 /** **************************************************************************** */
