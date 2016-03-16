@@ -31,29 +31,75 @@ using namespace std;
 
 
 void WVertex::computeNormal() {
-    Vector3 average(0,0,0), tmp; // à calculer
+    Vector3 average(0,0,0); // à calculer
 
-    WEdge *e, *e_new, *start;
-    e = start = this->edge();
+    WEdge *e = this->edge();
+
+    bool encourtered_no_face = false;
+    bool over = false;
+
+    int nbFacesIncidentes = 0;
 
     do {
-        if(e->begin()==this){
-            e_new = e->succLeft();
-            tmp = e->left()->normal();
+        // if we haven't encountered a null face go in a direction
+        if (encourtered_no_face) {
+
+            // if the curent Vertex is the END
+            if (e->end() == this->edge()->end()) {
+
+                // if we encounter a null face
+                // put the current edge to this.edge()
+                // go in the other direction
+                if (e->right() == NULL) {
+                    e = this->edge();
+                    encourtered_no_face = true;
+                } else {
+                    average += e->right()->normal();
+                    e = e->predRight();
+                    nbFacesIncidentes++;
+                }
+                // if the curent Vertex is the BEGIN
+            } else {
+
+                // if we encounter a null face
+                // put the current edge to this.edge()
+                // go in the other direction
+                if (e->left() == NULL) {
+                    e = this->edge();
+                    encourtered_no_face = true;
+                } else {
+                    average += e->left()->normal();
+                    e = e->predLeft();
+                    nbFacesIncidentes++;
+                }
+            }
+            // go on the other direction until we encounter another null face or this.edge()
+        } else {
+            if (e->end() == this->edge()->end()) {
+                // if we encounter another null -> end it
+                if (e->left() == NULL) {
+                    over = true;
+                } else {
+                    average += e->left()->normal();
+                    e = e->succLeft();
+                    nbFacesIncidentes++;
+                }
+            } else {
+                if (e->right() == NULL) {
+                    over = true;
+                } else {
+                    average += e->right()->normal();
+                    e = e->succRight();
+                    nbFacesIncidentes++;
+                }
+            }
         }
-        else{
-            e_new = e->succRight();
-            tmp = e->right()->normal();
-        }
-        average = (average+tmp)/2;
-        e = e_new;
-
-    } while (e != start);
+    } while (e != this->edge() && !over);
 
 
+    average = average / nbFacesIncidentes;
+    average.normalize();
 
-    // A LAISSER à la fin
-    // average.normalize();
     this->normal(average);
 }
 
