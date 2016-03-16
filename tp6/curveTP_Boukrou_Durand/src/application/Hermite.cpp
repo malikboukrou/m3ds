@@ -26,20 +26,20 @@ Vector3 Hermite::eval(double t) {
                      0.0,0.0,1.0,0.0,
                      1.0,0.0,0.0,0.0};
 
-  Vector3 res(0,0,0);
+  //Vector3 res(0,0,0);
   // A COMPLETER : calculer le point P(t) en utilisant les 16 coefficients de la matrice (i.e. coder explicitement le produit (t^3 t^2 t 1) matrix G : cf cours; les classes du squelette ne permettent pas de le faire directement).
   Matrix4 Mh;
   Mh.set(matrix);
-  Vector4 p = (t*t*t, t*t, t ,1.0);
+  Vector4 p(t*t*t, t*t, t ,1);
   Vector4 Mhp = Mh*p;
 
   Vector3 G[4] = {_a, _b, _ta, _tb};
 
-  double x = Mh.x()*G[0].x() + Mh.y()*G[1].x() + Mh.z()*G[2].x() + Mh.w()*G[3].x();
-  double y = Mh.x()*G[0].y() + Mh.y()*G[1].y() + Mh.z()*G[2].y() + Mh.w()*G[3].y();
-  double z = Mh.x()*G[0].z() + Mh.y()*G[1].z() + Mh.z()*G[2].z() + Mh.w()*G[3].z();
+  double x = Mhp.x()*G[0].x() + Mhp.y()*G[1].x() + Mhp.z()*G[2].x() + Mhp.w()*G[3].x();
+  double y = Mhp.x()*G[0].y() + Mhp.y()*G[1].y() + Mhp.z()*G[2].y() + Mhp.w()*G[3].y();
+  double z = Mhp.x()*G[0].z() + Mhp.y()*G[1].z() + Mhp.z()*G[2].z() + Mhp.w()*G[3].z();
 
-  res(x,y,z);
+  Vector3 res(x,y,z);
   return res;
 }
 
@@ -51,8 +51,8 @@ void Hermite::draw() {
 
     // A COMPLETER : calculer 100 (par exemple) points successifs de la courbe pour décrire la courbe de hermite
     // on insère les points calculés dans le tableau lPoints par des lPoints.push_back(unVector3) (lPoints sera alors tracé à la fin de la méthode par l'appel, déjà présent, à p3d::drawThickLineStrip ).
-
-
+    for (int i = 0; i <= 100; i++)
+        lPoints.push_back(this->eval(i*1.0/100));
     p3d::drawThickLineStrip(lPoints);
 
 }

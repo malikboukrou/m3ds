@@ -1,7 +1,10 @@
-Nom1 Prénom1
-Nom2 Prénom2
+Boukrou Malik
+Durand Jean-Frédéric
 
-Doit contenir :
-- ce que vous n'avez pas fait (et pourquoi). Précisez explicitement "tout à été fait et fonctionne parfaitement" si c'est le cas.
-- difficultés rencontrées.
-- commentaires éventuels sur le TP (points à éclaircir, longueur du sujet, etc). 
+
+
+TP Fonctionnel.
+
+Exercice 2 :
+	- Question 2 : La réflexion de lumière sur le cube ne semble pas correcte.
+	- Question 4 : Il faut parcourir les faces adjacentes à chaque sommet dans les deux sens.

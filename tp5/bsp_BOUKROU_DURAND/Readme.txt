@@ -1,13 +1,10 @@
 Durand Jean-Frédéric
 Boukrou Malik
 
-Doit contenir :
-- ce que vous n'avez pas fait (et pourquoi). Précisez explicitement "tout à été fait et fonctionne parfaitement" si c'est le cas.
-- difficultés rencontrées.
-- commentaires éventuels sur le TP (points à éclaircir, longueur du sujet, etc). 
+TP Fontionnel
 
 Exercice 4 :
 	- Difficile l'interpolationNormale
 
 Exercice 5 :
-	- 
+	- Notre intersection n'est pas parfaite car nous avons encore des bugs d'affichage sur le loup.
