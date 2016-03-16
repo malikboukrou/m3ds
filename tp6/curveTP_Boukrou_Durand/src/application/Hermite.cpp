@@ -19,18 +19,27 @@ using namespace std;
 * - on peut utiliser les opérateurs *, + entre les points et des doubles. Exemple : p=matrix[i]*_a+_b, ...
 **/
 Vector3 Hermite::eval(double t) {
-  // remplacer la matrice 4x4 identité suivante avec les valeurs correctes pour une courbe de Hermite (i.e. matrice de hermite; cf cours)
+  // remplacer la matrice 4x4 identité suivante avec les valeurs correctes pour une courbe de Hermite (i.e. matrice de hermite; cf cours) : OK
 
-  double matrix[16]={1.0,0.0,0.0,0.0,
-                     0.0,1.0,0.0,0.0,
+  double matrix[16]={2.0,-2.0,1.0,1.0,
+                     -3.0,3.0,-2.0,-1.0,
                      0.0,0.0,1.0,0.0,
-                     0.0,0.0,0.0,1.0};
+                     1.0,0.0,0.0,0.0};
 
   Vector3 res(0,0,0);
   // A COMPLETER : calculer le point P(t) en utilisant les 16 coefficients de la matrice (i.e. coder explicitement le produit (t^3 t^2 t 1) matrix G : cf cours; les classes du squelette ne permettent pas de le faire directement).
+  Matrix4 Mh;
+  Mh.set(matrix);
+  Vector4 p = (t*t*t, t*t, t ,1.0);
+  Vector4 Mhp = Mh*p;
 
+  Vector3 G[4] = {_a, _b, _ta, _tb};
 
+  double x = Mh.x()*G[0].x() + Mh.y()*G[1].x() + Mh.z()*G[2].x() + Mh.w()*G[3].x();
+  double y = Mh.x()*G[0].y() + Mh.y()*G[1].y() + Mh.z()*G[2].y() + Mh.w()*G[3].y();
+  double z = Mh.x()*G[0].z() + Mh.y()*G[1].z() + Mh.z()*G[2].z() + Mh.w()*G[3].z();
 
+  res(x,y,z);
   return res;
 }
 
