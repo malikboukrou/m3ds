@@ -8,4 +8,7 @@ Doit contenir :
 
 
 
-Courbe de Hermite : Fonctionnel
+Courbe de Hermite : Fonctionne
+Courbe de Bezier : Fonctionne
+Courbe de CatmulRomCurve : Fonctionne
+
