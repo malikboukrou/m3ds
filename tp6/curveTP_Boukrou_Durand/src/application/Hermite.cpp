@@ -49,7 +49,7 @@ Vector3 Hermite::eval(double t) {
 void Hermite::draw() {
     vector<Vector3> lPoints;
 
-    // A COMPLETER : calculer 100 (par exemple) points successifs de la courbe pour décrire la courbe de hermite
+    // A COMPLETER : calculer 100 (par exemple) points successifs de la courbe pour décrire la courbe de hermite : OK
     // on insère les points calculés dans le tableau lPoints par des lPoints.push_back(unVector3) (lPoints sera alors tracé à la fin de la méthode par l'appel, déjà présent, à p3d::drawThickLineStrip ).
     for (int i = 0; i <= 100; i++)
         lPoints.push_back(this->eval(i*1.0/100));

@@ -33,6 +33,14 @@ void CatmullRomCurve::draw() {
 
   if (nbPoint()<2) return; // tracé uniquement si plus de 2 points saisis.
 
+  for (int i = 0; i < nbPoint()-1; i++){
+      cubic.point(0,point(i));
+      cubic.point(1,intermediate(i,0));
+      cubic.point(2,intermediate(i,1));
+      cubic.point(3,point(i+1));
+
+      cubic.drawBezier();
+  }
 
 
 }
