@@ -15,28 +15,35 @@ uniform vec4 materialAmbient;
 out vec4 fColor;
 
 void main() {
-  float diffuseIntensity;
-  float specularIntensity=0;
-  vec4 positionEye;
-  vec3 L,V,N;
+    float diffuseIntensity;
+    float specularIntensity=0;
+    vec4 positionEye;
+    vec3 L,V,N,R;
 
-  positionEye=modelviewMatrix*vec4(position,1);
+    positionEye=modelviewMatrix*vec4(position,1);
 
-  V=-positionEye.xyz/positionEye.w;
-  L=lightPosition+V;
-  N=normalMatrix*normal;
+    V=-positionEye.xyz/positionEye.w;
+    L=lightPosition+V;
+    N=normalMatrix*normal;
 
-  L=normalize(L);
-  V=normalize(V);
-  N=normalize(N);
+    L=normalize(L);
+    V=normalize(V);
+    N=normalize(N);
 
-  // notez le max pour ne pas éclairer lorsque le produit scalaire est négatif (il faudra faire la même chose lors du calcul du spéculaire)
-  diffuseIntensity=max(dot(N,L),0.0);
+    R=normalize(R); //q2
+    R=2*dot(L,N)*N-L; //q2
 
-  // rouge, vert,bleu de l'éclairement :
-  fColor.rgb=diffuseIntensity*materialDiffuse+materialAmbient.xyz;
-  // le alpha est porté uniquement par materialAmbient.a.:
-  fColor.a=materialAmbient.a;
 
-  gl_Position=mvp*vec4(position,1);
+    // notez le max pour ne pas éclairer lorsque le produit scalaire est négatif (il faudra faire la même chose lors du calcul du spéculaire)
+    diffuseIntensity=max(dot(N,L),0.0);
+    specularIntensity=pow(dot(V,R), 50.0); //q2
+
+    // rouge, vert,bleu de l'éclairement :
+    fColor.rgb=diffuseIntensity*materialDiffuse+materialAmbient.xyz;
+    fColor.rgb=fColor.rgb + materialSpecular*specularIntensity; //q2
+
+    // le alpha est porté uniquement par materialAmbient.a.:
+    fColor.a=materialAmbient.a;
+
+    gl_Position=mvp*vec4(position,1);
 }
