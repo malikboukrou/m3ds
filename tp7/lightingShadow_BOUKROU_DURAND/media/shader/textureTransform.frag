@@ -14,6 +14,5 @@ void main() {
     texCoord.xyz /= 2;
 
 
-    fragColor = texture(image1,texCoord.xy);
-
+    fragColor=texture(image1,texCoord.xy);
 }
