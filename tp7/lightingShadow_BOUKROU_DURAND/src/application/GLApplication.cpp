@@ -185,7 +185,11 @@ void GLApplication::update() {
   }
 
   _textureEyeMatrix.setIdentity();
-
+  //_textureEyeMatrix.translate(4,0,0); //q7 ombre depth map
+  //_textureEyeMatrix.rotate(_moveAngle,0,0,1); //q8 depth map
+  //_textureEyeMatrix.scale(0.5); //q9 depth map
+  _textureEyeMatrix = _projectorMatrix.inverse() * _camera.worldLocal();//q10 depth map
+  _textureEyeMatrix = _textureEyeMatrix.fromFrustum(-0.05,0.05,-0.05,0.05,0.1,100)*(_projectorMatrix.inverse() * _camera.worldLocal());
 
   if (keyPressed(Qt::Key_A)) {
     _animate=!_animate;
