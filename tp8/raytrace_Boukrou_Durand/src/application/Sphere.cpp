@@ -41,8 +41,8 @@ void Sphere::intersection(const Ray &ray,IntersectionArray *result) {
   float d = pow(b,2) - 4 * a * c;
 
   if (d > 0){
-      float res1 = (-b-sqrt(d))/2;
-      float res2 = (-b+sqrt(d))/2;
+      float res1 = (-b-sqrt(d))/(2*a);
+      float res2 = (-b+sqrt(d))/(2*a);
       if (res1 < res2){
           result->addIntersection(res1);
           result->addIntersection(res2);
@@ -52,8 +52,6 @@ void Sphere::intersection(const Ray &ray,IntersectionArray *result) {
           result->addIntersection(res1);
       }
   }
-
-
 }
 
 

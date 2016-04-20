@@ -45,7 +45,12 @@ Vector3 Raytrace::computeRayColor(const Ray &ray, int level, double contribution
     if (inter!=NULL) { // existe-t-il une intersection avec la scène ?
       color=computeLocalColor(*inter); // calcul de la couleur par Phong
 
-
+      if(inter->material().reflectionCoefficient()>0) {
+        Ray miroir = inter->computeReflectRay();
+        Ray refract = inter->computeRefractRay();
+        color = (1-inter->material().refractionCoefficient())*color+this->computeRayColor(refract, level-1, contribution)*inter->material().refractionCoefficient();
+        color = (1-inter->material().reflectionCoefficient())*color+this->computeRayColor(miroir, level-1, contribution)*inter->material().reflectionCoefficient();
+      }
 
 
 
@@ -85,7 +90,7 @@ Vector3 Raytrace::computeLocalColor(const Intersection &intersection) {
   Vector3 V;
   N=intersection.normal();
   P=intersection.point();
-
+  N.normalize();
   // V= ?, L=?
 
   V = -intersection.incident().direction();

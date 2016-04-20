@@ -40,8 +40,48 @@ void IntersectionArray::fusion(IntersectionArray &gauche,IntersectionArray &droi
   this->clear(); // initialisation de la fusion
   // while(....)
 
+  unsigned int i = gauche.size();
+  unsigned int j = droite.size();
+  Intersection *currentIntersection;
 
+  while (iG < i || iD < j){
+      //si gauche est fini
+      if (iG >= i){
+          currentIntersection = droite[iD];
+          eD = !eD;
+          iD++;
+      }
+      //si droite est fini
+      else if (iD >= j){
+          currentIntersection = gauche[iG];
+          eG = !eG;
+          iG++;
+      }
+      //si aucun n'est fini
+      else {
+          if (gauche[iG]->lambda() < droite[iD]->lambda()) {
+              currentIntersection = gauche[iG];
+              eG = !eG;
+              iG++;
+          }
+          else {
+             currentIntersection = droite[iD];
+             eD = !eD;
+             iD++;
+          }
+      }
+      if (op == CsgTree::Node_Intersection)
+          ePN = (eG && eD);
+      if (op == CsgTree::Node_Union)
+          ePN = (eG || eD);
+      if (op == CsgTree::Node_Difference)
+          ePN = (eG && !eD);
 
+      if(ePN != eN){
+          this->push_back(currentIntersection);
+          eN = ePN;
+      }
+  }
 
 
 }
