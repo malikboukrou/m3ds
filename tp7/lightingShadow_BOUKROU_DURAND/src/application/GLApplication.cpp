@@ -147,8 +147,7 @@ void GLApplication::initialize() {
   _secondPassShader=0;
 
   _rtt.create(256,256);       // création d'un Frame Buffer de 256x256 pixels
-
-  _rtt.rtt(&_depthTexture,0); // 1er paramètre = Color Buffer des pixels (donc ici la texture _depthTexture; la texture porte donc mal son nom, *pour l'instant*, puisqu'elle va être affectée avec la couleur des pixels tracés),
+  _rtt.rtt(0, &_depthTexture); // 1er paramètre = Color Buffer des pixels (donc ici la texture _depthTexture; la texture porte donc mal son nom, *pour l'instant*, puisqu'elle va être affectée avec la couleur des pixels tracés),
                               // 2ième paramètre = Depth Buffer des pixels (0 signifie qu'un depth buffer par défaut est mis en place)
                               // le Color Buffer et le Depth Buffer les dimensions fixées par _rtt.create(256,256)
 
@@ -188,7 +187,7 @@ void GLApplication::update() {
   //_textureEyeMatrix.translate(4,0,0); //q7 ombre depth map
   //_textureEyeMatrix.rotate(_moveAngle,0,0,1); //q8 depth map
   //_textureEyeMatrix.scale(0.5); //q9 depth map
-  _textureEyeMatrix = _projectorMatrix.inverse() * _camera.worldLocal();//q10 depth map
+  //_textureEyeMatrix = _projectorMatrix.inverse() * _camera.worldLocal();//q10 depth map
   _textureEyeMatrix = _textureEyeMatrix.fromFrustum(-0.05,0.05,-0.05,0.05,0.1,100)*(_projectorMatrix.inverse() * _camera.worldLocal());
 
   if (keyPressed(Qt::Key_A)) {
@@ -260,14 +259,23 @@ void GLApplication::updateCamera() {
 
 
 void GLApplication::renderToTexture() {
-  _rtt.begin(); // activation : tous les tracés qui suivent seront faits directement dans _rtt
+    _rtt.begin(); // activation : tous les tracés qui suivent seront faits directement dans _rtt
+    glViewport(0,0,_rtt.width(),_rtt.height()); // viewport aux dimensions du frame buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glViewport(0,0,_rtt.width(),_rtt.height()); // viewport aux dimensions du frame buffer
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    p3d::projectionMatrix= _camera.projectionMatrix().fromFrustum(-0.5,0.5,-0.5,0.5,0.9,100);
+    //p3d::modelviewMatrix= _camera.localWorld();
+    p3d::modelviewMatrix= _projectorMatrix.inverse();
 
+    _currentShader=&_perVertexLighting; // les tracés qui suivent se feront avec le shader _perVertexLighting (premier exercice)
 
+    // on trace toute la scène dans la rtt sauf le projecteur :
+    lightPosition();
+    drawGround();
+    drawEarth();
+    drawObject();
 
-  _rtt.end(); // retour au frame buffer par défaut "normal"
+    _rtt.end(); // retour au frame buffer par défaut "normal"
 }
 
 
