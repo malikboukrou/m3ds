@@ -53,7 +53,8 @@ void Engine::computeForce() {
     if (p->alive()) {
       /* A COMPLETER : appliquer les forces subies */
       double G = 9.81;
-      Vector3 force(0,p->mass()*G)
+      Vector3 force(0,-p->mass()*G,0);
+      p->addForce(force);
 
     }
   }
@@ -78,7 +79,11 @@ void Engine::collisionPlane() {
         /* A COMPLETER  : détecter collision et corriger vitesse/position */
         /* on peut utiliser p->position(), p->velocity() (et les setters), et plane->point() et plane->normal() */
         /* p->radius() donne le rayon de la particule (exercice avec les sphère). */
-
+        Vector3 a(0, p->radius(),0);
+        if ((p->position() -a -plane->point()).dot(plane->normal()) <= 0){
+            posCorrection = 1.5*(plane->project(p->position()) - (p->position() - a));
+            velCorrection = -1.5*p->velocity().dot(plane->normal())*plane->normal();
+        }
         // appliquer les corrections calculées :
         p->addPositionCorrec(posCorrection);
         p->addVelocityCorrec(velCorrection);
@@ -121,7 +126,17 @@ void Engine::interCollision() {
           Vector3 velCorrectionP2(0,0,0); // correction en vitesse de P2
 
           /* A COMPLETER */
+          if (p1->position().distance(p2->position()) < p1->radius()+p2->radius()){
+            double d = (p1->position()-p2->position()).length() -p1->radius() - p2->radius();
+            Vector3 n = p2->position() - p1->position();
 
+
+            posCorrectionP1 = (1.1) * (p2->mass()/(p1->mass()+p2->mass()))*d*(n/n.dot(n));
+            velCorrectionP1 = -(computeImpulse(p1,p2,n,1.2)/p1->mass())*n;
+
+            posCorrectionP2 = -(1.1) * (p1->mass()/(p2->mass()+p1->mass()))*d*(n/n.dot(n));
+            velCorrectionP2 = (computeImpulse(p1,p2,n,1.2)/p2->mass())*n;
+          }
 
           // appliquer la correction éventuelle :
           p1->addPositionCorrec(posCorrectionP1);
