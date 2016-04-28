@@ -78,7 +78,7 @@ void Box::distance(Box *b1, Box *b2, const Vector3 &axe, double *distance, doubl
     b1->project(axe,&d1,&f1);
     b2->project(axe,&d2,&f2);
 
-    drawDebugProject(b1,b2,axe,d1,f1,d2,f2);
+    //drawDebugProject(b1,b2,axe,d1,f1,d2,f2);
 
     // A completer
     // d1,f1 : intervalle de projection pour la boite b1
