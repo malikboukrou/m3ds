@@ -235,7 +235,7 @@ void GLApplication::updateCamera() {
     if (backward())
         _camera.translate(Vector3(0,0,.4),Coordinate_Local);
 
-
+    //ex2 q2
     if (mouseLeft()) {
         _camera.rotate(deltaMouseX()/4,Vector3(0,-1,0),Coordinate_Local);
         _camera.rotate(deltaMouseY()/4,Vector3(1,0,0),Coordinate_Local);
