@@ -1,9 +1,9 @@
 Durand JF
 Boukrou Malik
 
-Doit contenir :
-- ce que vous n'avez pas fait (et pourquoi). Précisez explicitement "tout à été fait et fonctionne parfaitement" si c'est le cas.
-- difficultés rencontrées.
-- commentaires éventuels sur le TP (points à éclaircir, longueur du sujet, etc). 
+TP fonctionnel.
 
+Question 12 : 
+
+L'instabilité des spheres est due au fait qu'elles rentrent toutes en collision quasi permanente. Or dès qu'une sphère rentre en collision on l'a replace. Je pense que dans l'idéal il aurait fallu définir un coefficient a partir du quel la sphère n'est pas négligeable. Ainsi on n'aurait replacé la boule que si ce n'est pas négligeable au lieu de la faire bouger de qques pixels.
 
