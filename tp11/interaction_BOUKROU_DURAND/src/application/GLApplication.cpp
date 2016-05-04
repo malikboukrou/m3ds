@@ -214,10 +214,12 @@ void GLApplication::moveSelectedObject() {
             double dx=double(deltaMouseX())/100.0,dy=double(deltaMouseY())/100.0; // /100.0 to attenuate mouse motion
 
             if (_controlMouse==Manipulation_Translation) {
-
+                mesh->pointTo(Coordinate_World,_attachPointWorld);
+                mesh->directionTo(Coordinate_Local,_attachPointWorld);
+                mesh->translate(dx,dy,0,Coordinate_Local);
             }
             else if (_controlMouse==Manipulation_Orientation) {
-
+                mesh->rotate(5,dx,dy,0,Coordinate_Local);
             }
         }
     }
